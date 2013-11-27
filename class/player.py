@@ -18,7 +18,7 @@ class Player(pygame.sprite.Sprite):
         self.jumping = False
 
         self.rect.x = 200
-        self.rect.y = 100
+        self.rect.y = 75
 
         self.dx = 0
         self.dy = 0
@@ -72,7 +72,7 @@ class Player(pygame.sprite.Sprite):
 
         if not self.checkCollision() and not self.jumping:
             if self.dy < 540:
-                self.dy += 60
+                self.dy += 75
             else:
                 self.dy += 0
             
@@ -87,15 +87,19 @@ class Player(pygame.sprite.Sprite):
                     self.rect = last
                     
                 if self.rect.bottom <= block.rect.top and self.rect.bottom >= block.rect.bottom and self.checkCollision():
+                    self.jumping = False
                     self.rect = last
 
                 if self.rect.right >= block.rect.left and self.rect.right <= block.rect.right and self.rect.bottom >= block.rect.bottom and self.rect.top <= block.rect.top and self.checkCollision():
-                    self.jumping = False
+                    self.rect.x -= 0
                     self.rect = last
                     
 
                 if self.rect.left <= block.rect.right and self.rect.right >= block.rect.right and self.rect.bottom >= block.rect.bottom and self.rect.top <= block.rect.top and self.checkCollision():
+                    self.rect.x += 0
                     self.rect = last
+                    
+                    
                 
 
 

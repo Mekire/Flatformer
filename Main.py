@@ -7,6 +7,7 @@ sys.path.append('class')
 from player import Player
 from block import Block
 from maploader import MapLoader
+from bullet import Bullet
 pygame.init()
 
 class Game():
@@ -18,6 +19,7 @@ class Game():
         self.all_sprites = pygame.sprite.Group()
         self.enemies_list = pygame.sprite.Group()
         self.block_list = pygame.sprite.Group()
+        self.bullet_list = pygame.sprite.Group()
     
         # initiate the clock and screen
         
@@ -32,8 +34,8 @@ class Game():
     
             
         #create player
-        player = Player(self)
-        self.all_sprites.add(player)
+        self.player = Player(self)
+        self.all_sprites.add(self.player)
 
         #start loop
         while 1:
@@ -53,6 +55,9 @@ class Game():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
+            if event.type == MOUSEBUTTONDOWN:
+                bullet = Bullet(self, pygame.mouse.get_pos())
+                self.bullet_list.add(bullet)
             
                
             
@@ -66,8 +71,9 @@ class Game():
 
     def Draw(self):
         #draw all sprite
+        self.bullet_list.update(self.ttime / 1000.)
         self.all_sprites.update(self.ttime / 1000.)
-        
+        self.bullet_list.draw(self.screen)
         self.all_sprites.draw(self.screen)
         
 Game()
