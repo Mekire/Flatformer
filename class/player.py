@@ -80,21 +80,23 @@ class Player(pygame.sprite.Sprite):
 
         # detect if the player touches any of the blocks
         for block in self.game.block_list:
+            if self.rect.colliderect(block):
             
-            if self.rect.top <= block.rect.bottom and self.rect.top >= block.rect.top and self.checkCollision():
-                self.jumping = False
-                self.rect = last
+                if self.rect.top <= block.rect.bottom and self.rect.top >= block.rect.top and self.checkCollision():
+                    self.jumping = False
+                    self.rect = last
+                    
+                if self.rect.bottom <= block.rect.top and self.rect.bottom >= block.rect.bottom and self.checkCollision():
+                    self.rect = last
+
+                if self.rect.right >= block.rect.left and self.rect.right <= block.rect.right and self.rect.bottom >= block.rect.bottom and self.rect.top <= block.rect.top and self.checkCollision():
+                    self.jumping = False
+                    self.rect = last
+                    
+
+                if self.rect.left <= block.rect.right and self.rect.right >= block.rect.right and self.rect.bottom >= block.rect.bottom and self.rect.top <= block.rect.top and self.checkCollision():
+                    self.rect = last
                 
-            if self.rect.bottom <= block.rect.top and self.rect.bottom >= block.rect.bottom and self.checkCollision():
-                self.rect = last
-
-            if self.rect.right >= block.rect.left and self.rect.right <= block.rect.right and self.rect.bottom >= block.rect.bottom and self.rect.top <= block.rect.top and self.checkCollision():
-                self.jumping = False
-                self.rect = last
-
-            if self.rect.left <= block.rect.right and self.rect.right >= block.rect.right and self.rect.bottom >= block.rect.bottom and self.rect.top <= block.rect.top and self.checkCollision():
-                self.rect = last
-            
 
 
             
