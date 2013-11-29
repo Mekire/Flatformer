@@ -4,8 +4,9 @@ import os
 
 
 class Block(pygame.sprite.Sprite):
-    def __init__(self, game, pos, name):
+    def __init__(self, game, pos, name, block_type):
         self.game = game
+        self.block_type = block_type
         
         pygame.sprite.Sprite.__init__(self)
         img_n = "block%s.png" %name
@@ -15,5 +16,6 @@ class Block(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
         self.rect.topleft = (pos[0], pos[1])
+
         
         

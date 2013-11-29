@@ -70,10 +70,13 @@ class Game():
         self.last_tick = pygame.time.get_ticks()
 
     def Draw(self):
-        #draw all sprite
+        #update sprites
         self.bullet_list.update(self.ttime / 1000.)
+        self.enemies_list.update()
         self.all_sprites.update(self.ttime / 1000.)
+        #draw sprites
         self.bullet_list.draw(self.screen)
+        self.enemies_list.draw(self.screen)
         self.all_sprites.draw(self.screen)
         
 Game()

@@ -83,31 +83,32 @@ class Player(pygame.sprite.Sprite):
   
         for block in self.game.block_list:
             if self.rect.colliderect(block):
+                if block.block_type == 'solid':
                 
                 
-                self.bottomcheck = self.rect.bottom >= block.rect.top and self.rect.bottom <= block.rect.bottom and self.checkCollision()
-                self.rightcheck = self.rect.right >= block.rect.left and self.rect.right <= block.rect.right and self.rect.bottom >= block.rect.bottom and self.rect.top <= block.rect.top and self.checkCollision()
-                self.leftcheck = self.rect.left <= block.rect.right and self.rect.right >= block.rect.right and self.rect.bottom >= block.rect.bottom and self.rect.top <= block.rect.top and self.checkCollision()
-                self.topcheck = self.rect.top <= block.rect.bottom and self.rect.top >= block.rect.top and self.checkCollision() 
+                    self.bottomcheck = self.rect.bottom >= block.rect.top and self.rect.bottom <= block.rect.bottom and self.checkCollision()
+                    self.rightcheck = self.rect.right >= block.rect.left and self.rect.right <= block.rect.right and self.rect.bottom >= block.rect.bottom and self.rect.top <= block.rect.top and self.checkCollision()
+                    self.leftcheck = self.rect.left <= block.rect.right and self.rect.right >= block.rect.right and self.rect.bottom >= block.rect.bottom and self.rect.top <= block.rect.top and self.checkCollision()
+                    self.topcheck = self.rect.top <= block.rect.bottom and self.rect.top >= block.rect.top and self.checkCollision() 
 
-                if self.topcheck:
-                    self.jumping = False
-                    self.touch = True
-                    self.rect = last
+                    if self.topcheck:
+                        self.jumping = False
+                        self.touch = True
+                        self.rect = last
 
-                if self.bottomcheck:
-                    self.rect.bottom = block.rect.top+1
-                    self.touch = False
-                    self.jumping = False
+                    if self.bottomcheck:
+                        self.rect.bottom = block.rect.top+1
+                        self.touch = False
+                        self.jumping = False
 
 
-                if self.rightcheck and not self.bottomcheck:
-                    self.touch = True
-                    self.rect = last
+                    if self.rightcheck and not self.bottomcheck:
+                        self.touch = True
+                        self.rect = last
 
-                if self.leftcheck and not self.bottomcheck:
-                    self.touch = True
-                    self.rect = last
+                    if self.leftcheck and not self.bottomcheck:
+                        self.touch = True
+                        self.rect = last
                     
                 
                     

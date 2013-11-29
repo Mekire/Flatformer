@@ -2,6 +2,7 @@ from pygame.locals import *
 import pygame
 
 from block import Block
+from enemy import Enemy
 
 class MapLoader():
     def __init__(self, game):
@@ -18,11 +19,24 @@ class MapLoader():
             for char in line:
                 
                 if char == '1':
-                    block = Block(self, [col, row], "1")
+                    block = Block(self, [col, row], "1", 'solid')
                     self.game.block_list.add(block)
+                    
                 elif char == '2':
-                    block = Block(self, [col, row], "2")
+                    block = Block(self, [col, row], "2", 'solid')
                     self.game.block_list.add(block)
+                    
+                elif char == '3':
+                    block = Block(self, [col, row], "3", 'switcher')
+                    self.game.block_list.add(block)
+                    
+                elif char == '4':
+                    block = Block(self, [col, row], "1", 'switcher')
+                    self.game.block_list.add(block)
+                    
+                elif char == 'E':
+                    enemy = Enemy(self.game, [col, row], "blockman")
+                    self.game.enemies_list.add(enemy)
                     
                 elif char == '_': pass
 
