@@ -16,7 +16,7 @@ class Game():
         pygame.display.set_caption('Game!')
         
         # Spite lists
-        self.all_sprites = pygame.sprite.Group()
+        self.player_list = pygame.sprite.Group()
         self.enemies_list = pygame.sprite.Group()
         self.block_list = pygame.sprite.Group()
         self.bullet_list = pygame.sprite.Group()
@@ -29,13 +29,16 @@ class Game():
         self.center_point = [470., 350.]
         self.screen = pygame.display.set_mode(self.screen_res, pygame.HWSURFACE, 32)
 
-        maploader = MapLoader(self)
-        maploader.load(1)
+        self.current_map = 1
+
+        self.maploader = MapLoader(self)
+        self.maploader.load(1)
+
+        self.player = self.maploader.player
     
             
         #create player
-        self.player = Player(self)
-        self.all_sprites.add(self.player)
+        
 
         #start loop
         while 1:
@@ -73,10 +76,17 @@ class Game():
         #update sprites
         self.bullet_list.update(self.ttime / 1000.)
         self.enemies_list.update()
-        self.all_sprites.update(self.ttime / 1000.)
+        self.player_list.update(self.ttime / 1000.)
         #draw sprites
         self.bullet_list.draw(self.screen)
         self.enemies_list.draw(self.screen)
-        self.all_sprites.draw(self.screen)
+        self.player_list.draw(self.screen)
+
+    def Reset(self):
+        self.bullet_list.empty()
+        self.enemies_list.empty()
+        self.player_list.empty()
+        self.block_list.empty()
+        self.maploader.load(self.current_map)
         
 Game()

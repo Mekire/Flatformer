@@ -3,6 +3,7 @@ import pygame
 
 from block import Block
 from enemy import Enemy
+from player import Player
 
 class MapLoader():
     def __init__(self, game):
@@ -17,8 +18,11 @@ class MapLoader():
         row = 0
         for line in map_txt.split('\n'):
             for char in line:
-                
-                if char == '1':
+                if char == 'P':
+                    self.player = Player(self.game)
+                    self.game.player_list.add(self.player)
+                    
+                elif char == '1':
                     block = Block(self, [col, row], "1", 'solid')
                     self.game.block_list.add(block)
                     

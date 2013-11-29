@@ -78,7 +78,11 @@ class Bullet(pygame.sprite.Sprite):
         
         for block in self.game.block_list:
             if self.rect.colliderect(block):
-                self.kill()        
+                self.kill()
+                
+        for enemy in self.game.enemies_list:
+            if self.rect.colliderect(enemy):
+                self.kill()
 
         self.rect.x -= self.dx
         self.rect.y -= self.dy
