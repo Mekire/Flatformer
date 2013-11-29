@@ -11,7 +11,7 @@ class Player(pygame.sprite.Sprite):
         
         pygame.sprite.Sprite.__init__(self)
 
-        self.image = pygame.image.load(os.path.join('images', 'player', 'left.png'))
+        self.image = pygame.image.load(os.path.join('images', 'player', 'left0.png'))
 
         self.rect = self.image.get_rect()
 
@@ -34,6 +34,7 @@ class Player(pygame.sprite.Sprite):
 
               
         self.player_face = 'left'
+        self.player_state = 0
 
         self.player_frames = {}
         for fi in os.listdir(os.path.join('images', 'player')):
@@ -57,24 +58,40 @@ class Player(pygame.sprite.Sprite):
                 
                 if self.game.keys_pressed[K_d]and not self.touch:
                     self.player_face = 'right'
-                    self.rect.x += 15
-                    
+                    self.rect.x += 10
+
                 if self.game.keys_pressed[K_a]and not self.touch:
                     self.player_face = 'left'
-                    self.rect.x -= 15
-                    
+                    self.rect.x -= 10
+
                 if not self.jumping and self.game.keys_pressed[K_w] and self.checkCollision():
                     self.dy = -3
                     self.jumping = True
-                    
+
+            self.player_state += 0.2
+            if self.player_state >= 9.:
+                self.player_state = 1.
+                
+            if not self.game.keys_pressed[K_d] and not self.game.keys_pressed[K_a]:
+                self.player_state = 0.
+                self.player_face = self.player_face.split('_')[0]
+                
+            if self.game.keys_pressed[K_w] and self.game.keys_pressed[K_d]:
+                self.player_state = 0.
+                self.player_face = 'right_jump'
+                
+            if self.game.keys_pressed[K_w] and self.game.keys_pressed[K_a]:
+                self.player_state = 0.
+                self.player_face = 'left_jump'
+            
+            self.image = self.player_frames['%s%s.png' % (self.player_face, int(self.player_state))]
+
             if self.jumping:
                 self.dy -= 75
                 self.rect.y += self.dy * dt
                     
                 if self.dy < -600:
                     self.jumping = False
-                    
-                    
 
             if not self.checkCollision() and not self.jumping:
                 if self.dy < 540:
@@ -94,26 +111,29 @@ class Player(pygame.sprite.Sprite):
                         self.bottomcheck = self.rect.bottom >= block.rect.top and self.rect.bottom <= block.rect.bottom and self.checkCollision()
                         self.rightcheck = self.rect.right >= block.rect.left and self.rect.right <= block.rect.right and self.rect.bottom >= block.rect.bottom and self.rect.top <= block.rect.top and self.checkCollision()
                         self.leftcheck = self.rect.left <= block.rect.right and self.rect.right >= block.rect.right and self.rect.bottom >= block.rect.bottom and self.rect.top <= block.rect.top and self.checkCollision()
-                        self.topcheck = self.rect.top <= block.rect.bottom and self.rect.top >= block.rect.top and self.checkCollision() 
+                        self.topcheck = self.rect.top <= block.rect.bottom and self.rect.top >= block.rect.top and self.checkCollision()
 
-                        if self.topcheck:
+                        if self.topcheck and not self.rightcheck and not self.leftcheck:
                             self.jumping = False
                             self.touch = True
                             self.rect = last
 
-                        if self.bottomcheck:
+                        elif self.bottomcheck:
                             self.rect.bottom = block.rect.top+1
                             self.touch = False
                             self.jumping = False
 
-
-                        if self.rightcheck and not self.bottomcheck:
+                        elif self.rightcheck and not self.bottomcheck:
                             self.touch = True
                             self.rect = last
 
-                        if self.leftcheck and not self.bottomcheck:
+                        elif self.leftcheck and not self.bottomcheck:
                             self.touch = True
                             self.rect = last
+                            
+                        else:
+                            self.jumping = False  
+                            self.touch = True
 
             for enemy in self.game.enemies_list:
                 if self.rect.colliderect(enemy):
@@ -124,48 +144,9 @@ class Player(pygame.sprite.Sprite):
         else:
             self.rect.y += 30
             if self.rect.y > 550:
+                
                 self.game.Reset()
+                self.kill()
                 
             
                         
-        
-                    
-                
-                    
-                        
-                
-
-                
-                
-                    
-                    
-                
-
-
-            
-        
-                
-            
-            
-                
-
-                     
-            
-                
-
-           
-        self.image = self.player_frames['%s.png' % (self.player_face)]
-            
-   
-        
-        
-            
-    
-        
-    
-        
-            
-    
-        
-        
-        

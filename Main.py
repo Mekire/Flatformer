@@ -35,10 +35,6 @@ class Game():
         self.maploader.load(1)
 
         self.player = self.maploader.player
-    
-            
-        #create player
-        
 
         #start loop
         while 1:
@@ -61,9 +57,7 @@ class Game():
             if event.type == MOUSEBUTTONDOWN:
                 bullet = Bullet(self, pygame.mouse.get_pos())
                 self.bullet_list.add(bullet)
-            
-               
-            
+
     def Tick(self):
         
         self.ttime = self.clock.tick(45)
@@ -88,5 +82,6 @@ class Game():
         self.player_list.empty()
         self.block_list.empty()
         self.maploader.load(self.current_map)
+        self.player = self.maploader.player
         
 Game()
