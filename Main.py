@@ -18,7 +18,8 @@ class Game():
         # Spite lists
         self.player_list = pygame.sprite.Group()
         self.enemies_list = pygame.sprite.Group()
-        self.block_list = pygame.sprite.Group()
+        self.solid_blocks = pygame.sprite.Group()
+        self.pass_blocks = pygame.sprite.Group()
         self.bullet_list = pygame.sprite.Group()
     
         # initiate the clock and screen
@@ -62,8 +63,9 @@ class Game():
         
         self.ttime = self.clock.tick(45)
         self.keys_pressed = pygame.key.get_pressed()
-        self.screen.fill((0,0,200))
-        self.block_list.draw(self.screen)
+        self.screen.blit(self.maploader.bg, (0,0))
+        self.solid_blocks.draw(self.screen)
+        self.pass_blocks.draw(self.screen)
         self.last_tick = pygame.time.get_ticks()
 
     def Draw(self):
@@ -80,7 +82,8 @@ class Game():
         self.bullet_list.empty()
         self.enemies_list.empty()
         self.player_list.empty()
-        self.block_list.empty()
+        self.solid_blocks.empty()
+        self.pass_blocks.empty()
         self.maploader.load(self.current_map)
         self.player = self.maploader.player
         

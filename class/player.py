@@ -43,7 +43,7 @@ class Player(pygame.sprite.Sprite):
 
     def checkCollision(self):
     
-        if pygame.sprite.spritecollideany(self, self.game.block_list):
+        if pygame.sprite.spritecollideany(self, self.game.solid_blocks):
             
             return True
 
@@ -68,25 +68,29 @@ class Player(pygame.sprite.Sprite):
                     self.dy = -3
                     self.jumping = True
 
-            self.player_state += 0.2
-            if self.player_state >= 9.:
+            
+            if self.player_state >= 8.:
                 self.player_state = 1.
+            else:
+                self.player_state += 0.2
                 
             if not self.game.keys_pressed[K_d] and not self.game.keys_pressed[K_a]:
                 self.player_state = 0.
                 self.player_face = self.player_face.split('_')[0]
                 
-            if self.game.keys_pressed[K_w] and self.game.keys_pressed[K_d]:
-                self.player_state = 0.
+            elif self.game.keys_pressed[K_w] and self.game.keys_pressed[K_d]:
                 self.player_face = 'right_jump'
-                
-            if self.game.keys_pressed[K_w] and self.game.keys_pressed[K_a]:
                 self.player_state = 0.
+                
+            elif self.game.keys_pressed[K_w] and self.game.keys_pressed[K_a]:
                 self.player_face = 'left_jump'
+                self.player_state = 0.
+            
             
             self.image = self.player_frames['%s%s.png' % (self.player_face, int(self.player_state))]
 
             if self.jumping:
+                self.player_state = 0
                 self.dy -= 75
                 self.rect.y += self.dy * dt
                     
@@ -103,37 +107,41 @@ class Player(pygame.sprite.Sprite):
 
             # detect if the player touches any of the blocks
       
-            for block in self.game.block_list:
+            for block in self.game.solid_blocks:
                 if self.rect.colliderect(block):
-                    if block.block_type == 'solid':
+            
+                    self.bottomcheck = self.rect.bottom >= block.rect.top and self.rect.bottom <= block.rect.bottom and self.checkCollision()
+                    self.rightcheck = self.rect.right >= block.rect.left and self.rect.right <= block.rect.right and self.rect.bottom >= block.rect.bottom and self.checkCollision() and not self.topcheck
+                    self.leftcheck = self.rect.left <= block.rect.right and self.rect.left >= block.rect.left and self.rect.bottom >= block.rect.bottom  and self.checkCollision() and not self.topcheck
+                    self.topcheck = self.rect.top <= block.rect.bottom and self.rect.top >= block.rect.top and self.checkCollision()
+
+                    if self.topcheck:
+                        print 'top'
+                        self.jumping = False
+                        self.touch = True
+                        self.rect = last
+
+                    if self.bottomcheck:
+                        print "bottom"
+                        self.rect.bottom = block.rect.top+1
+                        self.touch = False
+                        self.jumping = False
+
+                    if self.rightcheck and not self.bottomcheck:
+                        print "right and ground"
+                        self.touch = True
+                        self.rect = last
+
+                    if self.leftcheck and not self.bottomcheck:
+                        print "left and ground"
+                        self.touch = True
+                        self.rect = last
+                        
+                
                     
+                      
+
                     
-                        self.bottomcheck = self.rect.bottom >= block.rect.top and self.rect.bottom <= block.rect.bottom and self.checkCollision()
-                        self.rightcheck = self.rect.right >= block.rect.left and self.rect.right <= block.rect.right and self.rect.bottom >= block.rect.bottom and self.rect.top <= block.rect.top and self.checkCollision()
-                        self.leftcheck = self.rect.left <= block.rect.right and self.rect.right >= block.rect.right and self.rect.bottom >= block.rect.bottom and self.rect.top <= block.rect.top and self.checkCollision()
-                        self.topcheck = self.rect.top <= block.rect.bottom and self.rect.top >= block.rect.top and self.checkCollision()
-
-                        if self.topcheck and not self.rightcheck and not self.leftcheck:
-                            self.jumping = False
-                            self.touch = True
-                            self.rect = last
-
-                        elif self.bottomcheck:
-                            self.rect.bottom = block.rect.top+1
-                            self.touch = False
-                            self.jumping = False
-
-                        elif self.rightcheck and not self.bottomcheck:
-                            self.touch = True
-                            self.rect = last
-
-                        elif self.leftcheck and not self.bottomcheck:
-                            self.touch = True
-                            self.rect = last
-                            
-                        else:
-                            self.jumping = False  
-                            self.touch = True
 
             for enemy in self.game.enemies_list:
                 if self.rect.colliderect(enemy):

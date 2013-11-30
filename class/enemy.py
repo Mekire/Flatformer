@@ -30,7 +30,7 @@ class Enemy(pygame.sprite.Sprite):
             elif self.direction == 'right':
                 self.rect.x -= 4 
 
-            for block in self.game.block_list:
+            for block in self.game.pass_blocks:
                 if self.rect.colliderect(block.rect) and block.block_type == 'switcher':
                     if self.direction == 'left':
                         self.direction = 'right'

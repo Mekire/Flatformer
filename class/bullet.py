@@ -76,10 +76,9 @@ class Bullet(pygame.sprite.Sprite):
         self.dx = bullet_vector[0]
         self.dy = bullet_vector[1]
         
-        for block in self.game.block_list:
+        for block in self.game.solid_blocks:
             if self.rect.colliderect(block):
-                if block.block_type == 'solid':
-                    self.kill()
+                self.kill()
                 
         for enemy in self.game.enemies_list:
             if self.rect.colliderect(enemy):

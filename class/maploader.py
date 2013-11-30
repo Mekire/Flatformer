@@ -1,5 +1,6 @@
 from pygame.locals import *
 import pygame
+import os
 
 from block import Block
 from enemy import Enemy
@@ -13,6 +14,9 @@ class MapLoader():
         with open("class\Maps\%s.map" %str(map_num), 'r') as f:
             map_txt =  f.read()
 
+        self.bg =  pygame.image.load(os.path.join('images', 'bg','bg1.png'))
+        
+
             
         col = 0
         row = 0
@@ -24,19 +28,19 @@ class MapLoader():
                     
                 elif char == '1':
                     block = Block(self, [col, row], "1", 'solid')
-                    self.game.block_list.add(block)
+                    self.game.solid_blocks.add(block)
                     
                 elif char == '2':
                     block = Block(self, [col, row], "2", 'solid')
-                    self.game.block_list.add(block)
+                    self.game.solid_blocks.add(block)
                     
                 elif char == '3':
                     block = Block(self, [col, row], "3", 'switcher')
-                    self.game.block_list.add(block)
+                    self.game.pass_blocks.add(block)
                     
                 elif char == '4':
                     block = Block(self, [col, row], "1", 'switcher')
-                    self.game.block_list.add(block)
+                    self.game.pass_blocks.add(block)
                     
                 elif char == 'E':
                     enemy = Enemy(self.game, [col, row], "blockman")
